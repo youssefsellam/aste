@@ -1,0 +1,227 @@
+# =============================================
+# FALLCO ASTE BOT - CONFIGURATION TEMPLATE
+# =============================================
+
+# =============================================
+# SCANNER SETTINGS
+# =============================================
+scanner:
+  scan_interval_seconds: 60
+  horizon_minutes: 60
+  max_pages_per_source: 5
+  rate_limit_per_minute: 30
+  request_timeout_seconds: 30
+  user_agent: "FallcoAsteBot/1.0 (Monitoring Bot; +https://github.com/fallcoaste-bot)"
+
+# =============================================
+# SOURCES TO MONITOR
+# =============================================
+sources:
+  - name: "ricerca"
+    url: "https://www.fallcoaste.it/ricerca.html"
+    enabled: true
+  - name: "autovetture"
+    url: "https://www.fallcoaste.it/categoria/autovetture-594.html"
+    enabled: true
+  - name: "autoveicoli"
+    url: "https://www.fallcoaste.it/categoria/autoveicoli-e-cicli-592.html"
+    enabled: true
+  - name: "preziosi"
+    url: "https://www.fallcoaste.it/categoria/preziosi-635.html"
+    enabled: true
+  - name: "orologeria"
+    url: "https://www.fallcoaste.it/categoria/arte-oreficeria-orologeria-antiquariato-633.html"
+    enabled: true
+  - name: "immobili"
+    url: "https://www.fallcoaste.it/categoria/immobili-590.html"
+    enabled: false  # Disabled by default - more complex parsing
+
+# =============================================
+# OPPORTUNITY DETECTION
+# =============================================
+opportunity:
+  roi_threshold: 0.30          # Minimum ROI to alert (30%)
+  min_resale_value: 50          # Minimum resale value to consider (€)
+  dedup_window_hours: 24        # Don't alert same auction within X hours
+
+# =============================================
+# COSTI E PARAMETRI PER CATEGORIA
+# =============================================
+costs:
+  auto:
+    commission_percent: 0.05     # 5% commissione asta
+    trasporto: 200               # Transport cost (€)
+    passaggio_proprieta: 150     # Passage cost (€)
+    ripristino: 300              # Restoration estimate (€)
+    other_costs: 100             # Other costs (€)
+    haircut: 0.15                # 15% sconto prudenziale
+    max_bid_percent: 0.70        # Max bid = 70% of resale
+
+  immobile:
+    commission_percent: 0.05
+    imposte_registro: 0.02       # 2%
+    altre_spese: 2000           # Altre spese fisse
+    lavori_stimati: 5000         # Lavori stimati
+    haircut: 0.05                # 5% sconto
+    max_bid_percent: 0.65       # Max bid = 65% of resale
+
+  gioiello:
+    commission_percent: 0.05
+    trasporto: 15                # Small package shipping
+    certificazione: 50           # Certify gold content
+    haircut: 0.20                # 20% sconto rischio
+    max_bid_percent: 0.80       # Max bid = 80% of resale
+
+  orologio:
+    commission_percent: 0.05
+    trasporto: 30
+    autenticazione: 100          # Authentication check
+    restauro: 200
+    haircut: 0.15                # 15% sconto
+    max_bid_percent: 0.70       # Max bid = 70% of resale
+
+  altro:
+    commission_percent: 0.05
+    trasporto: 50
+    haircut: 0.25                # 25% sconto generico
+    max_bid_percent: 0.60
+
+# =============================================
+# ORO SPOT CACHE
+# =============================================
+gold_spot:
+  cache_minutes: 10
+  fallback_price_eur_per_gram: 72.00  # Fallback if API fails
+
+# =============================================
+# WATCH BRAND TIERS (for valuation)
+# =============================================
+watch_brands:
+  luxury:
+    - "Rolex"
+    - "Patek Philippe"
+    - "Audemars Piguet"
+    - "Vacheron Constantin"
+    - "A. Lange & Söhne"
+    - "Breguet"
+    - "IWC"
+    - "Jaeger-LeCoultre"
+    - "Omega"
+  high:
+    - "Cartier"
+    - "Tag Heuer"
+    - "Longines"
+    - "Tissot"
+    - "Zenith"
+    - "Hublot"
+    - "Panerai"
+  mid:
+    - "Seiko"
+    - "Citizen"
+    - "Casio"
+    - "Swatch"
+    - "Fossil"
+    - "Movado"
+  low:
+    - "Generic"
+    - "Unknown"
+    - "Fashion"
+
+# =============================================
+# WATCH BASE VALUES (€) by tier
+# =============================================
+watch_values:
+  luxury: 5000
+  high: 1500
+  mid: 300
+  low: 100
+
+# =============================================
+# AUTO BRAND TIERS (for valuation)
+# =============================================
+auto_tiers:
+  luxury:
+    - "Mercedes"
+    - "BMW"
+    - "Audi"
+    - "Porsche"
+    - "Jaguar"
+    - "Lexus"
+    - "Land Rover"
+  premium:
+    - "Volkswagen"
+    - "Volvo"
+    - "Peugeot"
+    - "Citroen"
+    - "Renault"
+    - "Fiat"
+    - "Alfa Romeo"
+  budget:
+    - "Lancia"
+    - "Ford"
+    - "Opel"
+    - "Chevrolet"
+    - "Daewoo"
+    - "Dacia"
+
+# =============================================
+# AUTO BASE VALUES (€) by tier and age
+# =============================================
+auto_values:
+  # [new (<2 years), mid (2-5 years), old (>5 years)]
+  luxury:
+    - 40000
+    - 25000
+    - 15000
+  premium:
+    - 20000
+    - 12000
+    - 6000
+  budget:
+    - 12000
+    - 7000
+    - 3500
+
+# =============================================
+# IMMOBILE OMI MIN BY AREA (€/mq)
+# =============================================
+omi_min_by_area:
+  Milano:
+    centro: 4500
+    semicentro: 3500
+    periferia: 2500
+  Roma:
+    centro: 4000
+    semicentro: 3000
+    periferia: 2200
+  Napoli:
+    centro: 2800
+    semicentro: 2000
+    periferia: 1400
+  Torino:
+    centro: 2500
+    semicentro: 1800
+    periferia: 1300
+  Bologna:
+    centro: 3200
+    semicentro: 2400
+    periferia: 1700
+  Firenze:
+    centro: 3500
+    semicentro: 2600
+    periferia: 1800
+  GENOVA:
+    centro: 2800
+    semicentro: 2000
+    periferia: 1400
+  DEFAULT:
+    DEFAULT: 1200
+
+# =============================================
+# LOGGING
+# =============================================
+logging:
+  level: "INFO"
+  format: "%(asctime)s - %(name)s - %(levelname)s - %(message)s"
+  file: "fallco_bot.log"
+  console: true
