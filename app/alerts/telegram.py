@@ -10,8 +10,8 @@ from telegram import (
     InlineKeyboardMarkup,
     Update,
     InputMediaPhoto,
-    ParseMode,
 )
+from telegram.constants import ParseMode
 from telegram.error import TelegramError
 from telegram.ext import CallbackContext
 
